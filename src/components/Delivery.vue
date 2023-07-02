@@ -1,0 +1,19 @@
+<script setup>
+
+</script>
+
+<template>
+  <div class="info_block">
+    <h3>~ Delivery Info ~</h3>
+    <img class="info_img" src="@/assets/images/box.jpg" alt="pizza in a box image">
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id ad placeat, officiis laboriosam in vero.
+    </p>
+  </div>
+</template>
+
+
+
+<style lang="scss" scoped>
+
+</style>
