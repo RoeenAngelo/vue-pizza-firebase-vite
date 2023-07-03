@@ -1,7 +1,13 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
+import { useStoreBasket } from '@/stores/storeBasket'
+import { storeToRefs } from 'pinia'
 
-const basket = ref([])
+const store = useStoreBasket()
+const { basket, total }  = storeToRefs(store)
+const { addToBasket, increaseQuantity, decreaseQuantity, } = store
+
+
 const allPizzas = ref([
   {
     name: 'Margherita',
@@ -21,49 +27,6 @@ const allPizzas = ref([
   },
 ])
 
-function addToBasket(item, option) {
-  const pizzaExists = basket.value.find((pizza) => {
-     return pizza.name === item.name && pizza.size === option.size
-  })
-
-  if (!pizzaExists) {
-      basket.value.push({
-      name: item.name,
-      price: option.price,
-      size: option.size,
-      quantity: 1
-    })
-  } else {
-    pizzaExists.quantity++
-  }
-}
-
-function increaseQuantity(item) {
-  item.quantity++
-}
-
-function decreaseQuantity(item) {
-  item.quantity--
-  if (item.quantity === 0) {
-    removeFromBasket(item)
-  }
-}
-
-function removeFromBasket(item) {
-  basket.value.splice(basket.value.indexOf(item), 1)
-}
-
-// const total = computed(() => {
-//   let totalCost = 0
-//   basket.value.forEach(item => {
-//     totalCost += item.quantity * item.price
-//   })
-//   return totalCost
-// })
-
-const total = computed(() => {
-  return basket.value.reduce((p,c) => p + (c.quantity * c.price), 0)
-})
 </script>
 
 <template>
