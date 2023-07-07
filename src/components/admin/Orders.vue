@@ -1,31 +1,70 @@
 <script setup>
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { useStoreOrders } from '../../stores/storeOrders';
+
+const storeOrders = useStoreOrders()
+const { allOrders, message } = storeToRefs(storeOrders)
+const { deleteOrder } = storeOrders
+
+const showOrders = ref(true)
 
 </script>
 
 <template>
   <section class="admin_section">
     <header class="admin_section_header">
-      <h3>Current Orders (5)</h3>
+      <h3>Current orders ({{ allOrders.length }})</h3>
+      <small
+        @click="showOrders = !showOrders"
+        action=""
+        class="showOrHide"
+      >
+        {{ showOrders ? 'hide' : 'show' }}
+      </small> 
     </header>
-    <table>
-      <tr>
+    <p
+      v-if="message"
+      class="error"
+    >
+      {{ message }} error
+    </p>
+    <table
+      v-show="showOrders"
+    >
+      <tr v-if="allOrders.length > 0">
         <th>Item</th>
         <th>Size</th>
         <th>Quantity</th>
         <th>Price (total)</th>
       </tr>
-      <tr>
-        <td>
-          <strong>Order Number: 1</strong>
-          <button class="btn_remove" type="button">&times;</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Margherita</td>
-        <td>9 "</td>
-        <td>2</td>
-        <td>$ 20</td>
-      </tr>
+
+      <template
+        v-for="order in allOrders"
+        :key="order.id"
+      >
+        <tr>
+          <td>
+            <strong>Order Number: {{ order.id }}</strong>
+            <button
+              @click="deleteOrder(order.id)"
+              class="btn_remove"
+              type="button"
+            >
+              &times;
+            </button>
+          </td>
+        </tr>
+        <tr
+          v-for="orderItem in order.pizzas"
+          :key="orderItem.name + orderItem.size"
+        >
+          <td>{{ orderItem.name }}</td>
+          <td>{{ `${orderItem.size}"` }}</td>
+          <td>{{ orderItem.quantity }}</td>
+          <td>{{ (orderItem.price * orderItem.quantity).toFixed(2)}}</td>
+        </tr>
+      </template>
     </table>
   </section>
 </template>
@@ -33,5 +72,12 @@
 
 
 <style lang="scss" scoped>
-
+.error {
+  color: rgb(180,67,67);
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 1rem;
+  margin: 1rem;
+  text-align: center;
+}
 </style>

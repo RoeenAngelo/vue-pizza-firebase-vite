@@ -1,31 +1,21 @@
 <script setup>
-import { ref } from 'vue';
 import { useStoreBasket } from '@/stores/storeBasket'
 import { storeToRefs } from 'pinia'
-
-const store = useStoreBasket()
-const { basket, total }  = storeToRefs(store)
-const { addToBasket, increaseQuantity, decreaseQuantity, } = store
+import { onMounted } from 'vue';
 
 
-const allPizzas = ref([
-  {
-    name: 'Margherita',
-    description: 'A delicious tomato based pizza topped with mozzarella',
-    options: [
-      {size: 9, price: 6.95},
-      {size: 12, price: 12.95}
-    ]
-  },
-  {
-    name: 'Pepperoni',
-    description: 'A delicious tomato based pizza topped with mozzarella & pepperoni',
-    options: [
-      {size: 9, price: 7.95},
-      {size: 12, price: 13.95}
-    ]
-  },
-])
+const storeBasket = useStoreBasket()
+const { basket, total, basketText }  = storeToRefs(storeBasket)
+const { addToBasket, increaseQuantity, decreaseQuantity, addNewOrder } = storeBasket
+
+import usePizzas from "@/composables/usePizzas";
+const { allPizzas } = usePizzas();
+
+// import { useStorePizzas } from '@/stores/storePizzas'
+// const storePizzas = useStorePizzas()
+// const { allPizzas }  = storeToRefs(storePizzas)
+
+
 
 </script>
 
@@ -35,8 +25,8 @@ const allPizzas = ref([
       <h3>~ Authentic Handmade Pizza ~</h3>
       <table>
         <tbody
-          v-for="(pizza, index) in allPizzas"
-          :key="index"
+          v-for="pizza in allPizzas"
+          :key="pizza.id"
         >
           <tr>
             <td>
@@ -51,8 +41,8 @@ const allPizzas = ref([
             </td>
           </tr>
           <tr
-            v-for="(option, index) in pizza.options"
-            :key="option[index]"
+            v-for="option in pizza.options"
+            :key="pizza.id + option.size"
           >
             <td>{{ option.size }}"</td>
             <td>${{ option.price }}</td>
@@ -73,7 +63,7 @@ const allPizzas = ref([
     -->
     <div class="basket">
       <h3>~ Basket ~</h3>
-      <div>
+      <div v-if="basket.length > 0">
         <table>
           <tbody
             v-for="(item, index) in basket"
@@ -99,7 +89,14 @@ const allPizzas = ref([
           </tbody>
         </table>
         <p>Order total: {{ `$${total.toFixed(2)}` }}</p>
-        <button>Place order</button>
+        <button
+          @click="addNewOrder"          
+        >
+          Place order
+        </button>
+      </div>
+      <div v-else>
+        <p>{{ basketText }}</p>
       </div>
     </div>
   </div>

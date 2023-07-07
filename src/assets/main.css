@@ -115,6 +115,10 @@ input, textarea {
   padding: 1rem;
 }
 
+.showOrHide {
+  cursor: pointer;
+}
+
 /*
   Delivery and History 
 */
@@ -125,3 +129,5 @@ input, textarea {
   padding: 1rem;
   background-color: #faf1e2;
 }
+
+

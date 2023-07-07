@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import { addDoc } from 'firebase/firestore'
+import { dbPizzasRef } from '@/firebase'
+
+const message = ref('')
 
 const newPizza = ref({
   name: 'Eg. Margherita',
@@ -10,15 +14,35 @@ const newPizza = ref({
   ]
 })
 
+async function add() {
+  try {
+    await addDoc(dbPizzasRef, newPizza.value)
+    message.value = `Pizza ${newPizza.value.name} has been added`
+  } 
+  catch (error) {
+    message.value = "There was an error adding the pizza..."
+  }
 
+}
+
+const showAddNewPizza = ref('true')
 </script>
 
 <template>
   <section class="admin_section">
     <header class="admin_section_header">
       <h3>Add new pizza</h3>
-    </header>  
-      <form action="">
+      <small
+        @click="showAddNewPizza = !showAddNewPizza"
+        action=""
+        class="showOrHide"
+      >
+        {{ showAddNewPizza ? 'hide' : 'show' }}
+      </small> 
+    </header> 
+      <form
+      v-show="showAddNewPizza"
+      >
         <div class="form_group">
           <label for="name">Name</label>
           <input
@@ -75,7 +99,12 @@ const newPizza = ref({
           >
         </div>
         <div class="form_group">
-          <button>Add</button>
+          <button
+            @click.prevent="add"
+          >
+            Add
+          </button>
+          <span>{{ message }}</span>
         </div>
       </form>
   </section>
@@ -84,5 +113,7 @@ const newPizza = ref({
 
 
 <style lang="scss" scoped>
-
+span {
+  margin-left: 1rem;
+}
 </style>
