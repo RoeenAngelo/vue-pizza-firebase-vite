@@ -1,9 +1,12 @@
 <script setup>
+import SignIn from './admin/SignIn.vue';
+
 
 </script>
 
 <template>
   <header>
+    <SignIn />
     <h1 class="site_title">
       <RouterLink :to="{ name: 'home' }" > ~ Pizza Planet ~</RouterLink>
     </h1>
@@ -39,6 +42,7 @@
     background-size: cover;
     background-position: center;
     text-shadow: 1px 1px 3px rgb(20, 20, 20);
+    color: aliceblue;
   }
 
   h2 {
@@ -46,4 +50,5 @@
     color: antiquewhite;
     font-size: 2rem;
   }
+
 </style>

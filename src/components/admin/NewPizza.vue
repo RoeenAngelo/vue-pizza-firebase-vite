@@ -25,7 +25,7 @@ async function add() {
 
 }
 
-const showAddNewPizza = ref('true')
+const showAddNewPizza = ref(false)
 </script>
 
 <template>
@@ -37,7 +37,7 @@ const showAddNewPizza = ref('true')
         action=""
         class="showOrHide"
       >
-        {{ showAddNewPizza ? 'hide' : 'show' }}
+        {{ showAddNewPizza ? '&#x25B2;' : '&#x25BC' }}
       </small> 
     </header> 
       <form
@@ -116,4 +116,5 @@ const showAddNewPizza = ref('true')
 span {
   margin-left: 1rem;
 }
+
 </style>

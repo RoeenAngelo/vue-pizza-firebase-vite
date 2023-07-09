@@ -8,7 +8,7 @@ const storePizzas = useStorePizzas()
 const { allPizzas, message } = storeToRefs(storePizzas)
 const { deletePizza } = storePizzas
 
-const showMenu = ref(true)
+const showMenu = ref(false)
 
 </script>
 
@@ -21,7 +21,7 @@ const showMenu = ref(true)
         action=""
         class="showOrHide"
       >
-        {{ showMenu ? 'hide' : 'show' }}
+        {{ showMenu ? '&#x25B2;' : '&#x25BC' }}
       </small> 
     </header>
     <p

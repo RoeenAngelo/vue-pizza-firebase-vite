@@ -7,7 +7,7 @@ const storeOrders = useStoreOrders()
 const { allOrders, message } = storeToRefs(storeOrders)
 const { deleteOrder } = storeOrders
 
-const showOrders = ref(true)
+const showOrders = ref(false)
 
 </script>
 
@@ -20,7 +20,7 @@ const showOrders = ref(true)
         action=""
         class="showOrHide"
       >
-        {{ showOrders ? 'hide' : 'show' }}
+        {{ showOrders ? '&#x25B2;' : '&#x25BC' }}
       </small> 
     </header>
     <p
