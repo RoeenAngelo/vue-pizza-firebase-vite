@@ -31,10 +31,43 @@
       </nav>
       <RouterView />
     </section>
-
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.intro {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.info_text_wrapper, .info_img {
+  flex: 1;
+  padding: 1rem;
+  text-align: center;
+  align-self: center;
+}
+
+.more_info_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffeed2;
+  width: 100vw;
+  padding: 1rem;
+}
+
+
+
+@media(min-width: 900px){
+  .intro {
+    flex-direction: row;
+  }
+}
 </style>

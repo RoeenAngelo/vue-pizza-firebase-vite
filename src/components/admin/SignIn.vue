@@ -1,22 +1,51 @@
 <script setup>
 import { useStoreAuth } from '@/stores/storeAuth.js'
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const storeAuth = useStoreAuth()
-const { errorMessage, showSignInModal } = storeToRefs(storeAuth)
-const { signUp, toggleModal } = storeAuth
+const { errorMessage, showSignInModal, userData } = storeToRefs(storeAuth)
+const { signUp, logIn, logOut, toggleModal } = storeAuth
 
-const userData = ref({
+const formData = ref({
   email: '',
   password: '',
+})
+
+/*
+	Keyboard Control (press enter to sign in)
+  or place @keydown.enter="login(formData.email, formData.password) in the input tags"
+*/
+
+function handleKeyboard(e) {
+
+if (e.key === 'Enter') logIn(formData.value.email, formData.value.password)
+}
+
+onMounted(() => {
+  document.addEventListener('keyup', handleKeyboard)
+  })
+
+onUnmounted(() => {
+document.removeEventListener('keyup', handleKeyboard)
 })
 </script>
 
 
 <template>
-  <button class="sign_in_btn" @click="toggleModal">
+  <button
+    v-if="!userData"
+    @click="toggleModal"
+    class="sign_in_btn"
+  >
     Sign in
+  </button>
+  <button
+    v-else
+    @click="logOut"
+    class="sign_in_btn"
+  >
+    Sign out
   </button>
   <div
     v-if="showSignInModal"
@@ -35,7 +64,7 @@ const userData = ref({
         <div class="form_group">
           <label for="email">Email</label>
           <input
-            v-model="userData.email"
+            v-model="formData.email"
             id="email"
             placeholder="enter email"
             type="email"
@@ -44,15 +73,20 @@ const userData = ref({
         <div class="form_group">
           <label for="password">Password</label>
           <input
-            v-model="userData.password"
+            v-model="formData.password"
             id="password"
             placeholder="enter password"
             type="password"
           >
         </div>
-        <button type="button">Sign in</button>
         <button
-          @click.prevent="signUp(userData.email, userData.password)"
+          @click.prevent="logIn(formData.email, formData.password)"
+          type="button"
+        >
+          Sign in
+        </button>
+        <button
+          @click.prevent="signUp(formData.email, formData.password)"
           type="button"
         >
           Sign up
