@@ -1,7 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import { addDoc } from 'firebase/firestore'
 import { dbPizzasRef } from '@/firebase'
+import { useStoreAuth } from '../../stores/storeAuth';
+import { storeToRefs } from 'pinia';
+
+const storeAuth = useStoreAuth()
+const { userData } = storeToRefs(storeAuth)
+
 
 const message = ref('')
 
@@ -16,6 +22,7 @@ const newPizza = ref({
 
 async function add() {
   try {
+    if(!userData.value) return
     await addDoc(dbPizzasRef, newPizza.value)
     message.value = `Pizza ${newPizza.value.name} has been added`
   } 
@@ -25,7 +32,22 @@ async function add() {
 
 }
 
-const showAddNewPizza = ref(false)
+const showAddNewPizza = ref(true)
+
+function handleResize() {
+    if (window.innerWidth <= 900) showAddNewPizza.value = false
+  }
+
+  // onMounted(() => {
+  //   window.addEventListener('resize', handleResize)
+  // })
+
+  // onUnmounted(() => {
+  //   window.removeEventListener('resize', handleResize)
+  // })
+
+  onBeforeMount(handleResize)
+
 </script>
 
 <template>

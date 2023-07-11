@@ -1,10 +1,14 @@
 import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { addDoc } from 'firebase/firestore'
 import { dbOrdersRef } from '../firebase'
+import { useStoreAuth } from './storeAuth'
+
 
 
 export const useStoreBasket = defineStore('storeBasket', () => {
+  const storeAuth = useStoreAuth()
+  const { userData } = storeToRefs(storeAuth)
 
   const basket = ref([])
   const basketText = ref('Your basket is empty')

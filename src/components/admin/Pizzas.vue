@@ -1,14 +1,20 @@
 <script setup>
 
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useStorePizzas } from '../../stores/storePizzas';
 
 const storePizzas = useStorePizzas()
 const { allPizzas, message } = storeToRefs(storePizzas)
 const { deletePizza } = storePizzas
 
-const showMenu = ref(false)
+const showMenu = ref(true)
+
+function handleResize() {
+    if (window.innerWidth <= 900) showMenu.value = false
+}
+
+onBeforeMount(handleResize)
 
 </script>
 

@@ -103,6 +103,7 @@ input, textarea {
 }
 
 .admin_section {
+  flex: 1;
   margin: 1rem;
   border-radius: 0.3rem;
   background-color: #faf1e2;
