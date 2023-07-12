@@ -6,13 +6,13 @@ import { useStoreAuth } from '../stores/storeAuth';
 import { storeToRefs } from 'pinia';
 
 const storeAuth = useStoreAuth()
-const { userData } = storeToRefs(storeAuth)
+const { userData, userIsAdmin } = storeToRefs(storeAuth)
 
 </script>
 
 <template>
 <div
-  v-if="userData"
+  v-if="userIsAdmin"
 >
   <p class="user_email">Welcome {{ userData?.email }}</p>
   <h3>Admin</h3>

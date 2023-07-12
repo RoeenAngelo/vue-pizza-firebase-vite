@@ -9,7 +9,7 @@ export const useStoreOrders = defineStore('storeOrders', () => {
   const allOrders = ref([])
   const message = ref('')
 
-  // Stop listening to orders when out of the admin view using onUnmounted hook
+  // Stop fetching  orders when out of the admin view using onUnmounted hook
   const unsubscribeFromOrders = ref()
 
 

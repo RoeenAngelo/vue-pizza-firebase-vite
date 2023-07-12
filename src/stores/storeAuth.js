@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { ref } from 'vue';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db, dbUsersRef } from '../firebase';
+import { async, isAdmin } from '@firebase/util';
 
 
 
@@ -10,14 +13,44 @@ export const useStoreAuth = defineStore('storeAuth', () => {
   const errorMessage = ref('')
   const showSignInModal = ref(false)
   const userData = ref(null)
+  const userIsAdmin = ref(false)
+
+  /*
+    Check if user is admin
+  */
+    async function checkAdminRole() {
+      if(userData.value?.uid) {
+        const docRef = doc(dbUsersRef, userData.value.uid)
+        const user = await getDoc(docRef)
+        if(user.exists() && user.data().isAdmin) {
+          userIsAdmin.value = true
+        }
+        else {
+          userIsAdmin.value = false
+        }
+      }
+    }
 
   /*
     Sign Up
   */
     async function signUp(email, password) {
       try {
-        await createUserWithEmailAndPassword(auth, email, password)
+        const { user } = await createUserWithEmailAndPassword(
+          auth, 
+          email, 
+          password
+        )
+        const userObject = {
+          createdAt: new Date(),
+          email: user.email,
+          isAdmin: false
+        }
+        const newDoc = doc(db, "users", user.uid)
+        await setDoc(newDoc, userObject)
+
         errorMessage.value = ''
+        showSignInModal.value = false
       } 
       catch (error) {
         switch(error.code){
@@ -75,15 +108,17 @@ export const useStoreAuth = defineStore('storeAuth', () => {
     }
 
   /*
-    Observer
+    Auth Observer
   */
     onAuthStateChanged(auth, (user) => {
       if(user) {
         userData.value = user
         // console.log(userData.value)
+        checkAdminRole()
       } 
       else {
         userData.value = null
+        userIsAdmin.value = false
       }
     })
 
@@ -95,5 +130,6 @@ export const useStoreAuth = defineStore('storeAuth', () => {
     errorMessage,
     showSignInModal,
     toggleModal,
+    userIsAdmin
   }
 })
