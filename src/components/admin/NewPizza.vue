@@ -20,33 +20,30 @@ const newPizza = ref({
   ]
 })
 
-async function add() {
-  try {
-    if(!userData.value) return
-    await addDoc(dbPizzasRef, newPizza.value)
-    message.value = `Pizza ${newPizza.value.name} has been added`
-  } 
-  catch (error) {
-    message.value = "There was an error adding the pizza..."
+/*
+  Add New Pizza
+*/
+  async function add() {
+    try {
+      if(!userData.value) return
+      await addDoc(dbPizzasRef, newPizza.value)
+      message.value = `Pizza ${newPizza.value.name} has been added`
+    } 
+    catch (error) {
+      message.value = "There was an error adding the pizza..."
+    }
+
   }
 
-}
+/*
+  Show Add New Pizza Modal depending on screensize onBeforeMount
+*/
+  const showAddNewPizza = ref(true)
 
-const showAddNewPizza = ref(true)
-
-function handleResize() {
-    if (window.innerWidth <= 900) showAddNewPizza.value = false
-  }
-
-  // onMounted(() => {
-  //   window.addEventListener('resize', handleResize)
-  // })
-
-  // onUnmounted(() => {
-  //   window.removeEventListener('resize', handleResize)
-  // })
-
-  onBeforeMount(handleResize)
+  function handleResize() {
+      if (window.innerWidth <= 900) showAddNewPizza.value = false
+    }
+    onBeforeMount(handleResize)
 
 </script>
 

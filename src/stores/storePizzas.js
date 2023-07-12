@@ -16,14 +16,14 @@ export const useStorePizzas = defineStore('storePizzas', () => {
       try {
         message.value = "";
         onSnapshot(dbPizzasRef,(docs) => {
-        allPizzas.value = []
-        docs.forEach((doc) => {
-            const pizza = {
-              id: doc.id,
-              ...doc.data(),
-            };
-            allPizzas.value.push(pizza);
-          });
+          allPizzas.value = []
+          docs.forEach((doc) => {
+              const pizza = {
+                id: doc.id,
+                ...doc.data(),
+              };
+              allPizzas.value.push(pizza);
+            });
   
         })
       } catch (error) {

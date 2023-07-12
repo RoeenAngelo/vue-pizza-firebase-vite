@@ -1,26 +1,31 @@
 <script setup>
 import { useStoreBasket } from '@/stores/storeBasket'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue';
+import { useStorePizzas } from '@/stores/storePizzas'
 
+/*
+  storeBasket
+*/
+  const storeBasket = useStoreBasket()
+  const { basket, total, basketText, signInMessage }  = storeToRefs(storeBasket)
+  const { addToBasket, increaseQuantity, decreaseQuantity, addNewOrder } = storeBasket
 
-const storeBasket = useStoreBasket()
-const { basket, total, basketText }  = storeToRefs(storeBasket)
-const { addToBasket, increaseQuantity, decreaseQuantity, addNewOrder } = storeBasket
-
-import usePizzas from "@/composables/usePizzas";
-const { allPizzas } = usePizzas();
-
-// import { useStorePizzas } from '@/stores/storePizzas'
-// const storePizzas = useStorePizzas()
-// const { allPizzas }  = storeToRefs(storePizzas)
+/*
+  storePizzas
+*/
+  const storePizzas = useStorePizzas()
+  const { allPizzas }  = storeToRefs(storePizzas)
 
 
 
 </script>
 
 <template>
+
   <div class="menu_wrapper">
+    <!-- 
+      Menu
+    -->
     <div class="menu">
       <h3>~ Authentic Handmade Pizza ~</h3>
       <table>
@@ -45,7 +50,7 @@ const { allPizzas } = usePizzas();
             :key="pizza.id + option.size"
           >
             <td>{{ option.size }}"</td>
-            <td>${{ option.price }}</td>
+            <td>{{ filters.formatMoney(option.price) }}</td>
             <td>
               <button
                 @click="addToBasket(pizza, option)"
@@ -84,11 +89,12 @@ const { allPizzas } = usePizzas();
               >&#43;</button>
             </td>
             <td>{{ item.name }} {{ item.size }}"</td>
-            <td> ${{ (item.price * item.quantity).toFixed(2) }}</td>
+            <td> {{ filters.formatMoney((item.price * item.quantity)) }}</td>
           </tr>
           </tbody>
         </table>
-        <p>Order total: {{ `$${total.toFixed(2)}` }}</p>
+        <p>Order total: {{ filters.formatMoney(total) }}</p>
+        <p>{{ signInMessage }}</p>
         <button
           @click="addNewOrder"          
         >
@@ -121,7 +127,7 @@ h3 {
   .menu, .basket {
     background-color: #faf1e2;
     border-radius: 3px;
-    height: 100vh;
+    // height: 100vh;
     padding: 1rem;
   }
 

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { ref } from 'vue';
-import { async } from '@firebase/util';
 
 
 
@@ -81,6 +80,7 @@ export const useStoreAuth = defineStore('storeAuth', () => {
     onAuthStateChanged(auth, (user) => {
       if(user) {
         userData.value = user
+        // console.log(userData.value)
       } 
       else {
         userData.value = null
