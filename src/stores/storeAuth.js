@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { ref } from 'vue';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db, dbUsersRef } from '../firebase';
 import { async, isAdmin } from '@firebase/util';
 
@@ -14,6 +14,31 @@ export const useStoreAuth = defineStore('storeAuth', () => {
   const showSignInModal = ref(false)
   const userData = ref(null)
   const userIsAdmin = ref(false)
+  const toggleAdminMessage = ref('')
+  const selectedUser = ref(null)
+
+
+  /*
+    Find user
+  */
+    async function findUser(userEmail) {
+      try {
+        toggleAdminMessage.value = ''
+        if(!userIsAdmin)  return
+        const queryData = query(dbUsersRef, where('email', '==', userEmail))
+        const user = await getDocs(queryData)
+        const userObject = {
+          id: user.docs[0].id,
+          email: user.docs[0].data().email,
+          isAdmin: user.docs[0].data().isAdmin,
+        }
+        selectedUser.value = userObject
+      } 
+      catch (error) {
+      selectedUser.value = null
+      toggleAdminMessage.value = 'No user found with that email'
+      }
+    }
 
   /*
     Check if user is admin
@@ -28,6 +53,23 @@ export const useStoreAuth = defineStore('storeAuth', () => {
         else {
           userIsAdmin.value = false
         }
+      }
+    }
+
+  /*
+    Toggle Admin function
+  */
+    async function toggleAdmin() {
+      try {
+        if(!userIsAdmin.value) return
+        const docRef = doc(db, 'users', selectedUser.value.id)
+        await updateDoc(docRef, {
+          isAdmin: !selectedUser.value.isAdmin
+        })
+        findUser(selectedUser.value.email)
+      } 
+      catch (error) {
+        console.log(error)
       }
     }
 
@@ -130,6 +172,10 @@ export const useStoreAuth = defineStore('storeAuth', () => {
     errorMessage,
     showSignInModal,
     toggleModal,
-    userIsAdmin
+    userIsAdmin,
+    findUser,
+    selectedUser,
+    toggleAdminMessage,
+    toggleAdmin
   }
 })

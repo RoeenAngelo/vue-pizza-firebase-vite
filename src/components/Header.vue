@@ -1,6 +1,5 @@
 <script setup>
-import SignIn from './admin/SignIn.vue';
-
+import SignIn from './SignIn.vue';
 
 </script>
 
