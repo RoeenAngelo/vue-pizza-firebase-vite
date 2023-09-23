@@ -7,7 +7,7 @@ import SignIn from './SignIn.vue';
   <header>
     <SignIn />
     <h1 class="site_title">
-      <RouterLink :to="{ name: 'home' }" > ~ Pizza Planet ~</RouterLink>
+      <RouterLink :to="{ name: 'home' }" > ~ Angelo's ~</RouterLink>
     </h1>
     <nav>
       <RouterLink class="link" :to="{ name: 'home' }">Home</RouterLink>

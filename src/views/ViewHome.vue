@@ -8,7 +8,7 @@
       <h3>Hot out of the oven!</h3>
       <p class="hot_pizza_name">Vegetarian Hot Pizza</p>
       <p class="hot_pizza_description">Our signature Vegetarian pizza, but with a kick!</p>
-      <RouterLink :to="{ name: 'menu' }">Order Now</RouterLink>
+      <RouterLink :to="{ name: 'menu' }">Order Now!</RouterLink>
     </div>
     <img src="@/assets/images/fire.jpg" alt="pizza oven image" class="hot_img">
   </main>

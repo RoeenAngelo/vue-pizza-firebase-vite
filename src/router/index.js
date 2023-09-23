@@ -17,7 +17,7 @@ const router = createRouter({
       components: {
         default: ViewHome,
         delivery: Delivery,
-        history: History
+        history: History,
       }
     },
     {

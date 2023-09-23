@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { onMounted, ref } from 'vue'
-import { deleteDoc, doc, getDocs, onSnapshot } from 'firebase/firestore'
+import { deleteDoc, doc, onSnapshot } from 'firebase/firestore'
 import { dbPizzasRef } from '../firebase'
 import { async } from '@firebase/util'
 
